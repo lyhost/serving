@@ -4,28 +4,54 @@ package tensorflow.serving;
 option cc_enable_arenas = true;
 
 import "tensorflow_serving/apis/classification.proto";
-import "tensorflow_serving/apis/get_model_metadata.proto";
+//import "tensorflow_serving/apis/get_model_metadata.proto";
 import "tensorflow_serving/apis/inference.proto";
 import "tensorflow_serving/apis/predict.proto";
 import "tensorflow_serving/apis/regression.proto";
+import "google/api/annotations.proto";
 
 // open source marker; do not remove
 // PredictionService provides access to machine-learned models loaded by
 // model_servers.
 service PredictionService {
   // Classify.
-  rpc Classify(ClassificationRequest) returns (ClassificationResponse);
+  rpc Classify(ClassificationRequest) returns (ClassificationResponse) {
+    option (google.api.http) = {
+      post: "/v1/prediction/classify"
+      body: "*"
+    };
+  }
 
   // Regress.
-  rpc Regress(RegressionRequest) returns (RegressionResponse);
+  rpc Regress(RegressionRequest) returns (RegressionResponse) {
+    option (google.api.http) = {
+      post: "/v1/prediction/regress"
+      body: "*"
+    };
+  }
 
-  // Predict -- provides access to loaded TensorFlow model.
-  rpc Predict(PredictRequest) returns (PredictResponse);
+  // Predict -- provides access to loaded TensorFlow predict.
+  rpc Predict(PredictRequest) returns (PredictResponse) {
+    option (google.api.http) = {
+      post: "/v1/prediction/predict"
+      body: "*"
+    };
+  }
 
-  // MultiInference API for multi-headed models.
-  rpc MultiInference(MultiInferenceRequest) returns (MultiInferenceResponse);
+  // MultiInference API for multi-headed predicts.
+  rpc MultiInference(MultiInferenceRequest) returns (MultiInferenceResponse) {
+    option (google.api.http) = {
+      post: "/v1/prediction/multi_inference"
+      body: "*"
+    };
+  }
 
-  // GetModelMetadata - provides access to metadata for loaded models.
-  rpc GetModelMetadata(GetModelMetadataRequest)
-      returns (GetModelMetadataResponse);
+  // // GetPredictMetadata - provides access to metadata for loaded predicts.
+  // rpc GetPredictMetadata(GetPredictMetadataRequest)
+  //     returns (GetPredictMetadataResponse) {
+  //   option (google.api.http) = {
+  //     post: "/v1/prediction/meta_data"
+  //     body: "*"
+  //   };
+  // }
 }
