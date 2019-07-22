@@ -5,6 +5,7 @@ option cc_enable_arenas = true;
 import "tensorflow_serving/apis/model.proto";
 import "tensorflow/core/protobuf/config.proto";
 import "tensorflow/core/protobuf/named_tensor.proto";
+import "google/api/annotations.proto";
 
 package tensorflow.serving;
 
@@ -47,5 +48,10 @@ message SessionRunResponse {
 // to run, and you request a specific model/session with ModelSpec.
 service SessionService {
   // Runs inference of a given model.
-  rpc SessionRun(SessionRunRequest) returns (SessionRunResponse);
+  rpc SessionRun(SessionRunRequest) returns (SessionRunResponse) {
+    option (google.api.http) = {
+      post: "/v1/session/run"
+      body: "*"
+    };
+  }
 }
