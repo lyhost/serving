@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package tensorflow.serving;
+
+import "google/api/annotations.proto";
+
+message Node {
+  string type = 1;
+  string id = 2;
+  map<string, string> string_features = 3;
+  map<string, int64> int_features = 4;
+  map<string, float> float_features = 5;
+}
+
+message QueryRequest {
+  string type = 1;
+  string id = 2;
+}
+
+message QueryResponse {
+  repeated float embedding = 1;
+  string version = 2;
+}
+
+message IRPredictRequest {
+  Node node = 1;
+}
+
+message IRPredictResponse {
+  repeated float embedding = 1;
+  string version = 2;
+}
+
+
+message RecommendRequest {
+  Node node = 1;
+  string rec_node_type = 2;
+  uint32 num = 3;
+  // default need_predict is false, and node embedding is queried before mathing. If need_predict is true,
+  // node embedding is predicted with node's features.
+  bool need_predict = 4;
+}
+
+message RecommendResponse {
+  message Result {
+    string id = 1;
+    float score = 2;
+  }
+  repeated Result results = 1;
+  string version = 2;
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string reply = 1;
+}
+
+service IRService  {
+  rpc query(QueryRequest) returns (QueryResponse) {
+    option (google.api.http) = {
+      post: "/v1/ir/query"
+      body: "*"
+    };
+  }
+
+  rpc recommend(RecommendRequest) returns (RecommendResponse) {
+    option (google.api.http) = {
+      post: "/v1/ir/recommend"
+      body: "*"
+    };
+  }
+
+  rpc predict(IRPredictRequest) returns (IRPredictResponse) {
+    option (google.api.http) = {
+      post: "/v1/ir/predict"
+      body: "*"
+    };
+  }
+
+  rpc ping(PingRequest) returns (PingResponse) {
+    option (google.api.http) = {
+      get: "/v1/ir/ping"
+    };
+  }
+
+}
