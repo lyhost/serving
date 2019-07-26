@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 
 import "tensorflow_serving/apis/get_model_status.proto";
 import "tensorflow_serving/apis/model_management.proto";
+import "tensorflow_serving/apis/get_model_metadata.proto";
 
 
 // ModelService provides methods to query and update the state of the server,
@@ -19,6 +20,13 @@ service ModelService {
   rpc GetModelStatus(GetModelStatusRequest) returns (GetModelStatusResponse) {
     option (google.api.http) = {
       post: "/v1/model/status"
+      body: "*"
+    };
+  }
+
+  rpc GetModelMetadata(GetModelMetadataRequest) returns (GetModelMetadataResponse) {
+    option (google.api.http) = {
+      post: "/v1/model/metadata"
       body: "*"
     };
   }
