@@ -37,7 +37,9 @@ class ModelServiceImpl final : public ModelService::Service {
   ::grpc::Status HandleReloadConfigRequest(::grpc::ServerContext *context,
                                            const ReloadConfigRequest *request,
                                            ReloadConfigResponse *response);
-
+  ::grpc::Status GetModelMetadata(::grpc::ServerContext *context,
+                                const GetModelMetadataRequest *request,
+                                GetModelMetadataResponse *response) override;
  private:
   ServerCore *core_;
 };

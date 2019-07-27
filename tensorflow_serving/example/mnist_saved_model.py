@@ -145,3 +145,7 @@ def main(_):
 
 if __name__ == '__main__':
   tf.app.run()
+
+
+# data --> tensor_info_x --> predict
+#          |-->

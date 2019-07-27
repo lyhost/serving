@@ -18,6 +18,7 @@ limitations under the License.
 #include "tensorflow_serving/model_servers/get_model_status_impl.h"
 #include "tensorflow_serving/model_servers/grpc_status_util.h"
 #include "tensorflow_serving/util/status_util.h"
+#include "tensorflow_serving/servables/tensorflow/get_model_metadata_impl.h"
 
 namespace tensorflow {
 namespace serving {
@@ -29,6 +30,17 @@ namespace serving {
       GetModelStatusImpl::GetModelStatus(core_, *request, response));
   if (!status.ok()) {
     VLOG(1) << "GetModelStatus failed: " << status.error_message();
+  }
+  return status;
+}
+
+::grpc::Status ModelServiceImpl::GetModelMetadata(
+    ::grpc::ServerContext *context, const GetModelMetadataRequest *request,
+    GetModelMetadataResponse *response) {
+  const ::grpc::Status status = tensorflow::serving::ToGRPCStatus(
+      GetModelMetadataImpl::GetModelMetadata(core_, *request, response));
+  if (!status.ok()) {
+    VLOG(1) << "GetModelMetadata failed: " << status.error_message();
   }
   return status;
 }
